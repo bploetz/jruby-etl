@@ -1,0 +1,18 @@
+#!/bin/sh
+#
+# Dynamically adds all jar files found in the lib directory to the classpath
+#
+case "`uname`" in
+  CYGWIN*) PATH_SEPARATOR=";" ;;
+  *) PATH_SEPARATOR=":" ;;
+esac
+
+for jar in ${jruby-etl-install.dir}/lib/*.jar;
+do
+	if [ "${TMP_CLASSPATH}" = "" ]; then	
+       TMP_CLASSPATH="${jar}"
+    else
+    TMP_CLASSPATH="${TMP_CLASSPATH}${PATH_SEPARATOR}${jar}"
+    fi
+done
+export CLASSPATH=${TMP_CLASSPATH}${PATH_SEPARATOR}${jruby-etl-install.dir}/conf

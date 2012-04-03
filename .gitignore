@@ -1,0 +1,26 @@
+# Mac
+.DS_Store
+
+# Textmate
+#.tmproj
+tmtags
+
+# Emacs
+*~
+\#*
+.\#*
+
+# Vim
+**/*.swp
+
+# Eclipse
+.project
+.loadpath
+
+# Generic
+**/*.tmp*
+*Thumbs.db
+
+java/target
+java/.settings
+java/.classpath
