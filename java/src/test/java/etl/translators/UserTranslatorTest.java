@@ -2,7 +2,7 @@ package etl.translators;
 
 import static org.junit.Assert.*;
 
-import org.jruby.runtime.ThreadContext;
+import org.jruby.javasupport.JavaUtil;
 import org.jruby.runtime.builtin.IRubyObject;
 import org.junit.Test;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +21,8 @@ import model.UserTest;
 public class UserTranslatorTest extends TranslatorTest {
 
   static final void assertTranslated(User javaUser, IRubyObject rubyUser) {
-    ThreadContext ctx = rubyUser.getRuntime().getCurrentContext();
-    assertEquals(javaUser.getUsername(), rubyUser.callMethod(ctx, "username").asJavaString());
+    assertEquals(JavaUtil.convertJavaToRuby(RUNTIME, javaUser.getId()), rubyUser.callMethod(CTX, "rdbms_id"));
+    assertEquals(javaUser.getUsername(), rubyUser.callMethod(CTX, "username").asJavaString());
   }
 
   @Test

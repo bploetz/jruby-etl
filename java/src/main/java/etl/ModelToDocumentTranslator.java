@@ -1,10 +1,15 @@
 package etl;
 
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 import org.jruby.Ruby;
 import org.jruby.javasupport.JavaUtil;
+import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.builtin.IRubyObject;
 
 import model.Model;
@@ -19,17 +24,17 @@ import model.Model;
  */
 public abstract class ModelToDocumentTranslator {
 
-  public static final Ruby RUNTIME = Ruby.getGlobalRuntime();
+  protected static final String JAVA_UTC_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss Z";
+  protected static final String RUBY_UTC_TIME_FORMAT = "%Y-%m-%d %H:%M:%S %z";
+  protected static final Ruby RUNTIME = Ruby.getGlobalRuntime();
+  protected static final ThreadContext CTX = RUNTIME.getCurrentContext();
 
   static {
     try {
-      // System.setProperty("jruby.base", jrubyHome);
-      // System.setProperty("jruby.home", jrubyHome);
-      // System.setProperty("jruby.lib", jrubyHome + "\\lib");
       RUNTIME.getLoadService().init(new ArrayList<String>());
-      RUNTIME.runNormally(RUNTIME.parseEval(ModelToDocumentTranslator.getInitFileContents(), "init.rb", RUNTIME.getCurrentContext().getCurrentScope(), 0));
+      RUNTIME.runNormally(RUNTIME.parseEval(ModelToDocumentTranslator.getInitFileContents(), "init.rb", CTX.getCurrentScope(), 0));
       IRubyObject loader = RUNTIME.evalScriptlet("PropertyLoader.new");
-      loader.callMethod(RUNTIME.getCurrentContext(), "loadProperties", JavaUtil.convertJavaToRuby(RUNTIME, ModelToDocumentTranslator.getMongoMapperFileContents()));
+      loader.callMethod(CTX, "loadProperties", JavaUtil.convertJavaToRuby(RUNTIME, ModelToDocumentTranslator.getMongoMapperFileContents()));
     } catch (Exception e) {
       throw new ExceptionInInitializerError(e);
     }
@@ -46,9 +51,62 @@ public abstract class ModelToDocumentTranslator {
   public abstract IRubyObject translate(Model model) throws TranslationException;
 
   /**
+   * Converts a Java Date to it's Ruby representation.
+   */
+  public static IRubyObject convertToRuby(Date javaDate) {
+    if (javaDate == null) {
+      return RUNTIME.evalScriptlet("nil");
+    }
+    SimpleDateFormat formatter = new SimpleDateFormat(JAVA_UTC_TIME_FORMAT);
+    formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+    String formattedTime = formatter.format(javaDate);
+    RUNTIME.evalScriptlet("require 'time'");
+    return RUNTIME.evalScriptlet("Time.parse(\"" + formattedTime + "\").utc");
+  }
+
+  /**
+   * Formats a Java Date as JAVA_UTC_TIME_FORMAT
+   */
+  public static String format(Date javaDate) {
+    if (javaDate == null) {
+      return "";
+    }
+    SimpleDateFormat formatter = new SimpleDateFormat(JAVA_UTC_TIME_FORMAT);
+    formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+    return formatter.format(javaDate);
+  }
+
+  /**
+   * Converts a Ruby Date to it's Java representation.
+   */
+  public static Date convertToJava(IRubyObject rubyDate) {
+    if (rubyDate.isNil()) {
+      return null;
+    }
+    String formattedTime = rubyDate.callMethod(CTX, "strftime", JavaUtil.convertJavaToRuby(rubyDate.getRuntime(), RUBY_UTC_TIME_FORMAT)).asJavaString();
+    SimpleDateFormat formatter = new SimpleDateFormat(JAVA_UTC_TIME_FORMAT);
+    formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+    try {
+      return formatter.parse(formattedTime);
+    } catch (ParseException pe) {
+      return null;
+    }
+  }
+
+  /**
+   * Formats a Ruby Date as RUBY_UTC_TIME_FORMAT
+   */
+  public static String format(IRubyObject rubyDate) {
+    if (rubyDate == null || rubyDate.isNil()) {
+      return "";
+    }
+    return rubyDate.callMethod(CTX, "strftime", JavaUtil.convertJavaToRuby(rubyDate.getRuntime(), RUBY_UTC_TIME_FORMAT)).asJavaString();
+  }
+
+  /**
    * Gets the contents of init.rb as a String
    */
-  public static String getInitFileContents() {
+  private static String getInitFileContents() {
     return ModelToDocumentTranslator.getFileContents("init.rb");
   }
 
