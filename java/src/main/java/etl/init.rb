@@ -7,7 +7,7 @@ begin
   require 'ruby-model'
   require 'mongo_mapper'
   require 'logger'
-rescue Bundler::GemNotFound => e
+rescue => e
   STDERR.puts e.message
   STDERR.puts "Try running `bundle install`."
   exit!

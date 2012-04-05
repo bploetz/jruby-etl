@@ -29,7 +29,7 @@ public class BlogTranslator extends ModelToDocumentTranslator {
   public IRubyObject translate(Model model) throws TranslationException {
     Blog javaBlog = (Blog)model;
 
-    String expr = RUBY_CLASS + ".where(:rdbms_id => \"" + javaBlog.getId() + "\").first";
+    String expr = RUBY_CLASS + ".where(:rdbms_id => " + javaBlog.getId() + ").first";
     IRubyObject rubyBlog = RUNTIME.evalScriptlet(expr);
     if(rubyBlog.isNil()){
       rubyBlog = RUNTIME.evalScriptlet(NEW_BLOG);

@@ -21,6 +21,7 @@
     <property name="dataSource" ref="dataSource"/>
     <property name="hibernateProperties">
       <value>
+        hibernate.show_sql=true
         hibernate.dialect=org.hibernate.dialect.HSQLDialect
         hibernate.connection.pool_size=1
         hibernate.dialect=org.hibernate.dialect.HSQLDialect

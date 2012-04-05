@@ -27,7 +27,7 @@ public class UserTranslator extends ModelToDocumentTranslator {
   public IRubyObject translate(Model model) throws TranslationException {
     User javaUser = (User)model;
 
-    String expr = RUBY_CLASS + ".where(:rdbms_id => \"" + javaUser.getId() + "\").first";
+    String expr = RUBY_CLASS + ".where(:rdbms_id => " + javaUser.getId() + ").first";
     IRubyObject rubyUser = RUNTIME.evalScriptlet(expr);
     if(rubyUser.isNil()){
       rubyUser = RUNTIME.evalScriptlet(NEW_USER);

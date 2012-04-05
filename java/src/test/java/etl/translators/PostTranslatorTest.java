@@ -38,7 +38,7 @@ public class PostTranslatorTest extends TranslatorTest {
     assertEquals(JavaUtil.convertJavaToRuby(RUNTIME, javaPost.getComments().size()), rubyComments.callMethod(CTX, "size"));
     for (Comment javaComment : javaPost.getComments()) {
       boolean found = false;
-      Iterator rubyCommentsIterator = rubyComments.iterator();
+      Iterator<?> rubyCommentsIterator = rubyComments.iterator();
       while (rubyCommentsIterator.hasNext()) {
         IRubyObject rubyComment = (IRubyObject)rubyCommentsIterator.next();
         if (JavaUtil.convertJavaToRuby(RUNTIME, javaComment.getId()).eql(rubyComment.callMethod(CTX, "rdbms_id"))) {
