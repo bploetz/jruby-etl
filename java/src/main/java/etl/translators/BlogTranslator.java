@@ -3,7 +3,7 @@ package etl.translators;
 import org.jruby.javasupport.JavaUtil;
 import org.jruby.runtime.builtin.IRubyObject;
 
-import etl.ModelToDocumentTranslator;
+import etl.EntityToDocumentTranslator;
 import etl.TranslationException;
 
 import model.Model;
@@ -16,7 +16,7 @@ import model.Post;
  *
  * @author bploetz
  */
-public class BlogTranslator extends ModelToDocumentTranslator {
+public class BlogTranslator extends EntityToDocumentTranslator {
 
   private static final String RUBY_CLASS = "Blog";
   private static final String NEW_BLOG = "Blog.new";

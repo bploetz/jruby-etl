@@ -16,13 +16,13 @@ import model.Model;
 
 
 /**
- * A ModelToDocumentTranslator is a class which translates model.Model objects
- * to Ruby MongoDB document objects. Subclasses implement the translate()
+ * An EntityToDocumentTranslator is a class which translates RDBMS entities
+ * to MongoDB documents. Subclasses implement the translate()
  * method to provide the specific translation logic for each entity.
  *
  * @author bploetz
  */
-public abstract class ModelToDocumentTranslator {
+public abstract class EntityToDocumentTranslator {
 
   protected static final String JAVA_UTC_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss Z";
   protected static final String RUBY_UTC_TIME_FORMAT = "%Y-%m-%d %H:%M:%S %z";
@@ -32,17 +32,17 @@ public abstract class ModelToDocumentTranslator {
   static {
     try {
       RUNTIME.getLoadService().init(new ArrayList<String>());
-      RUNTIME.runNormally(RUNTIME.parseEval(ModelToDocumentTranslator.getInitFileContents(), "init.rb", CTX.getCurrentScope(), 0));
+      RUNTIME.runNormally(RUNTIME.parseEval(EntityToDocumentTranslator.getInitFileContents(), "init.rb", CTX.getCurrentScope(), 0));
       IRubyObject loader = RUNTIME.evalScriptlet("PropertyLoader.new");
-      loader.callMethod(CTX, "loadProperties", JavaUtil.convertJavaToRuby(RUNTIME, ModelToDocumentTranslator.getMongoMapperFileContents()));
+      loader.callMethod(CTX, "loadProperties", JavaUtil.convertJavaToRuby(RUNTIME, EntityToDocumentTranslator.getMongoMapperFileContents()));
     } catch (Exception e) {
       throw new ExceptionInInitializerError(e);
     }
   }
 
   /**
-   * Method which subclasses must implement to translate a Model object
-   * to it's associated Ruby Document object counterpart.
+   * Method which subclasses must implement to translate an entity object
+   * to it's associated document object counterpart.
    * 
    * @param model the Model object to translate
    * @return the translated Ruby Document object
@@ -107,21 +107,21 @@ public abstract class ModelToDocumentTranslator {
    * Gets the contents of init.rb as a String
    */
   private static String getInitFileContents() {
-    return ModelToDocumentTranslator.getFileContents("init.rb");
+    return EntityToDocumentTranslator.getFileContents("init.rb");
   }
 
   /**
    * Gets the contents of mongo_mapper.yml as a String
    */
   public static String getMongoMapperFileContents() {
-    return ModelToDocumentTranslator.getFileContents("mongo_mapper.yml");
+    return EntityToDocumentTranslator.getFileContents("mongo_mapper.yml");
   }
 
   private static String getFileContents(String filename) {
     try {
-      InputStream stream = ModelToDocumentTranslator.class.getResourceAsStream(filename);
+      InputStream stream = EntityToDocumentTranslator.class.getResourceAsStream(filename);
       if (stream == null) {
-        stream = ModelToDocumentTranslator.class.getClassLoader().getResource(filename).openStream();
+        stream = EntityToDocumentTranslator.class.getClassLoader().getResource(filename).openStream();
       }
       if (stream == null) {
         throw new RuntimeException("Cannot find file in classpath: " + filename);

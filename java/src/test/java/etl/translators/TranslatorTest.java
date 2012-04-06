@@ -15,7 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import etl.ModelToDocumentTranslator;
+import etl.EntityToDocumentTranslator;
 
 
 /**
@@ -40,7 +40,7 @@ public abstract class TranslatorTest {
     // isn't set until the etl ModelToDocumentTranslator is loaded. *shrug*
     RUNTIME.runNormally(RUNTIME.parseEval(TranslatorTest.getFileContents("mongo_dropper.rb"), "mongo_dropper.rb", CTX.getCurrentScope(), 0));
     IRubyObject mongoDbDropper = RUNTIME.evalScriptlet("MongoDBDropper.new");
-    mongoDbDropper.callMethod(CTX, "drop", JavaUtil.convertJavaToRuby(RUNTIME, ModelToDocumentTranslator.getMongoMapperFileContents()));
+    mongoDbDropper.callMethod(CTX, "drop", JavaUtil.convertJavaToRuby(RUNTIME, EntityToDocumentTranslator.getMongoMapperFileContents()));
   }
 
   private static String getFileContents(String filename) {

@@ -3,7 +3,7 @@ package etl.translators;
 import org.jruby.javasupport.JavaUtil;
 import org.jruby.runtime.builtin.IRubyObject;
 
-import etl.ModelToDocumentTranslator;
+import etl.EntityToDocumentTranslator;
 import etl.TranslationException;
 
 import model.Model;
@@ -16,7 +16,7 @@ import model.Comment;
  *
  * @author bploetz
  */
-public class PostTranslator extends ModelToDocumentTranslator {
+public class PostTranslator extends EntityToDocumentTranslator {
 
   private static final String NEW_POST = "Post.new";
   private static final String SET_RDBMS_ID = "rdbms_id=";

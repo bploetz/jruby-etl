@@ -79,7 +79,7 @@ public class DBSeeder implements App {
     session.save(entertainmentBlog);
     logger.info("Created Blog '" + entertainmentBlog.getTitle() + "' (id=" + entertainmentBlog.getId() + ")");
 
-    Post entertainmentPost1 = new Post(businessBlog, "Entertainment Post #1", "I like movies", new Date(), bill);
+    Post entertainmentPost1 = new Post(entertainmentBlog, "Entertainment Post #1", "I like movies", new Date(), bill);
     session.save(entertainmentPost1);
     logger.info("Created Post '" + entertainmentPost1.getTitle() + "' in Blog '" + entertainmentBlog.getTitle() + "' (id=" + entertainmentBlog.getId() + ")");
 

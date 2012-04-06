@@ -13,18 +13,17 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 
 /**
- * Tests for base methods in ModelToDocumentTranslator.
+ * Tests for base methods in EntityToDocumentTranslator.
  *
  * @author bploetz
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations="/test-applicationContext.xml")
 @TransactionConfiguration(transactionManager="transactionManager", defaultRollback=true)
-public class ModelToDocumentTranslatorTest {
+public class EntityToDocumentTranslatorTest {
 
   @Test
   public void testConvertRubyToJava() {
@@ -33,10 +32,10 @@ public class ModelToDocumentTranslatorTest {
       SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
       formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
       Date javaDate = formatter.parse(sourceDateString);
-      String javaDateString = ModelToDocumentTranslator.format(javaDate);
+      String javaDateString = EntityToDocumentTranslator.format(javaDate);
       assertEquals(sourceDateString, javaDateString);
-      IRubyObject rubyDate = ModelToDocumentTranslator.convertToRuby(javaDate);
-      String rubyDateString = ModelToDocumentTranslator.format(rubyDate);
+      IRubyObject rubyDate = EntityToDocumentTranslator.convertToRuby(javaDate);
+      String rubyDateString = EntityToDocumentTranslator.format(rubyDate);
       assertEquals(rubyDateString, javaDateString);
     } catch (ParseException pe) {
       fail(pe.getMessage());
@@ -50,9 +49,9 @@ public class ModelToDocumentTranslatorTest {
       SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
       formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
       Date javaDate = formatter.parse(sourceDateString);
-      String javaDateString = ModelToDocumentTranslator.format(javaDate);
-      IRubyObject rubyDate = ModelToDocumentTranslator.convertToRuby(javaDate);
-      String rubyDateString = ModelToDocumentTranslator.format(rubyDate);
+      String javaDateString = EntityToDocumentTranslator.format(javaDate);
+      IRubyObject rubyDate = EntityToDocumentTranslator.convertToRuby(javaDate);
+      String rubyDateString = EntityToDocumentTranslator.format(rubyDate);
       assertEquals(rubyDateString, javaDateString);
     } catch (ParseException pe) {
       fail(pe.getMessage());

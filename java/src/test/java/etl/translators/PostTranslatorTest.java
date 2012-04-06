@@ -10,7 +10,7 @@ import org.jruby.runtime.builtin.IRubyObject;
 import org.junit.Test;
 import org.springframework.transaction.annotation.Transactional;
 
-import etl.ModelToDocumentTranslator;
+import etl.EntityToDocumentTranslator;
 import etl.TranslationException;
 
 import model.Comment;
@@ -30,7 +30,7 @@ public class PostTranslatorTest extends TranslatorTest {
     assertEquals(JavaUtil.convertJavaToRuby(RUNTIME, javaPost.getId()), rubyPost.callMethod(CTX, "rdbms_id"));
     assertEquals(javaPost.getTitle(), rubyPost.callMethod(CTX, "title").asJavaString());
     assertEquals(javaPost.getContent(), rubyPost.callMethod(CTX, "content").asJavaString());
-    assertEquals(ModelToDocumentTranslator.format(javaPost.getPostDate()), ModelToDocumentTranslator.format(rubyPost.callMethod(CTX, "post_date")));
+    assertEquals(EntityToDocumentTranslator.format(javaPost.getPostDate()), EntityToDocumentTranslator.format(rubyPost.callMethod(CTX, "post_date")));
     assertEquals(javaPost.getAuthor().getUsername(), rubyPost.callMethod(CTX, "author_username").asJavaString());
     UserTranslatorTest.assertTranslated(javaPost.getAuthor(), rubyPost.callMethod(CTX, "author"));
 
