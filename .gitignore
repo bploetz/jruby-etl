@@ -24,3 +24,5 @@ tmtags
 java/target
 java/.settings
 java/.classpath
+
+ruby/rspec.html

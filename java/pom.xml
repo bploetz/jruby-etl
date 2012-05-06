@@ -95,11 +95,11 @@
         <targetPath>../scripts</targetPath>
       </resource>
       <resource>
-        <directory>src/main/java/etl</directory>
+        <directory>src/main/java/app</directory>
         <includes>
           <include>init.rb</include>
         </includes>
-        <targetPath>../classes/etl</targetPath>
+        <targetPath>../classes/app</targetPath>
         <filtering>false</filtering>
       </resource>
     </resources>

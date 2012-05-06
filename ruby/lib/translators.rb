@@ -1,0 +1,5 @@
+require 'java'
+require 'translators/blog_translator'
+require 'translators/comment_translator'
+require 'translators/post_translator'
+require 'translators/user_translator'

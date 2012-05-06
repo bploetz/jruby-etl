@@ -1,0 +1,5 @@
+--colour
+--format documentation
+--format html
+--out rspec.html
+--tty

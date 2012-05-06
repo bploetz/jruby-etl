@@ -23,4 +23,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency("rake", ["= 0.8.7"])
   s.add_runtime_dependency("activemodel", ["= 3.0.7"])
   s.add_runtime_dependency("jruby-openssl", ["= 0.7.2"])
+
+  s.add_development_dependency("rspec", '>= 2.9.0')
 end

@@ -15,4 +15,4 @@ do
     TMP_CLASSPATH="${TMP_CLASSPATH}${PATH_SEPARATOR}${jar}"
     fi
 done
-export CLASSPATH=${TMP_CLASSPATH}${PATH_SEPARATOR}${jruby-etl-install.dir}/conf
+export CLASSPATH=${TMP_CLASSPATH}${PATH_SEPARATOR}${jruby-etl-install.dir}/conf${PATH_SEPARATOR}${rubygem.dir}/lib
